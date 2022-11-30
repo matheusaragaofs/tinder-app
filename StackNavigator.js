@@ -10,7 +10,6 @@ const Stack = createNativeStackNavigator() // gives access to all routing capabi
 const StackNavigator = () => {
     const user = false;
   return (
-    <NavigationContainer>
     <Stack.Navigator>
         {user ? (
                 <>
@@ -21,7 +20,6 @@ const StackNavigator = () => {
       <Stack.Screen name="Login" component={LoginScreen} />
         )}
     </Stack.Navigator>
-  </NavigationContainer>
   )
 }
 
