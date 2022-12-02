@@ -1,7 +1,52 @@
 {
-	"flex": {
+	"absolute": {
 		"style": {
-			"display": "flex"
+			"position": "absolute"
+		}
+	},
+	"relative": {
+		"style": {
+			"position": "relative"
+		}
+	},
+	"left-5": {
+		"style": {
+			"left": 20
+		}
+	},
+	"top-3": {
+		"style": {
+			"top": 12
+		}
+	},
+	"bottom-40": {
+		"style": {
+			"bottom": 160
+		}
+	},
+	"h-10": {
+		"style": {
+			"height": 40
+		}
+	},
+	"h-14": {
+		"style": {
+			"height": 56
+		}
+	},
+	"w-10": {
+		"style": {
+			"width": 40
+		}
+	},
+	"w-14": {
+		"style": {
+			"width": 56
+		}
+	},
+	"w-52": {
+		"style": {
+			"width": 208
 		}
 	},
 	"flex-1": {
@@ -11,38 +56,60 @@
 			"flexBasis": "0%"
 		}
 	},
+	"flex-row": {
+		"style": {
+			"flexDirection": "row"
+		}
+	},
 	"items-center": {
 		"style": {
 			"alignItems": "center"
 		}
 	},
-	"justify-center": {
+	"justify-between": {
 		"style": {
-			"justifyContent": "center"
+			"justifyContent": "space-between"
 		}
 	},
-	"text-red-600": {
+	"rounded-full": {
 		"style": {
-			"--tw-text-opacity": 1,
-			"color": "rgb(220 38 38 / var(--tw-text-opacity))"
+			"borderTopLeftRadius": 9999,
+			"borderTopRightRadius": 9999,
+			"borderBottomRightRadius": 9999,
+			"borderBottomLeftRadius": 9999
 		}
 	},
-	"text-blue-400": {
+	"rounded-2xl": {
 		"style": {
-			"--tw-text-opacity": 1,
-			"color": "rgb(96 165 250 / var(--tw-text-opacity))"
+			"borderTopLeftRadius": 16,
+			"borderTopRightRadius": 16,
+			"borderBottomRightRadius": 16,
+			"borderBottomLeftRadius": 16
 		}
 	},
-	"text-red-400": {
+	"bg-white": {
 		"style": {
-			"--tw-text-opacity": 1,
-			"color": "rgb(248 113 113 / var(--tw-text-opacity))"
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(255 255 255 / var(--tw-bg-opacity))"
 		}
 	},
-	"text-red-500": {
+	"p-4": {
 		"style": {
-			"--tw-text-opacity": 1,
-			"color": "rgb(239 68 68 / var(--tw-text-opacity))"
+			"paddingTop": 16,
+			"paddingRight": 16,
+			"paddingBottom": 16,
+			"paddingLeft": 16
+		}
+	},
+	"px-5": {
+		"style": {
+			"paddingLeft": 20,
+			"paddingRight": 20
+		}
+	},
+	"text-center": {
+		"style": {
+			"textAlign": "center"
 		}
 	}
 }
