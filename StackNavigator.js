@@ -5,10 +5,13 @@ import { NavigationContainer } from '@react-navigation/native'
 import HomeScreen from './screens/HomeScreen'
 import ChatScreen from './screens/ChatScreen'
 import LoginScreen from './screens/LoginScreen'
+import { useAuth } from './hooks/useAuth'
 
 const Stack = createNativeStackNavigator() // gives access to all routing capabilities within rn navigation
 const StackNavigator = () => {
-    const user = false;
+
+  const { user } = useAuth()
+
   return (
     <Stack.Navigator>
         {user ? (
@@ -17,7 +20,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Chat" component={ChatScreen} />
                 </>
         ): (
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen 
+      name="Login" component={LoginScreen} />
         )}
     </Stack.Navigator>
   )
