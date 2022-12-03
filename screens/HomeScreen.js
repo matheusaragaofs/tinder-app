@@ -13,7 +13,7 @@ const HomeScreen = () => {
   }
   const tw = useTailwind()
   // const { user } = useAuth()
-  const navigate = useNavigation()
+  const navigation = useNavigation()
   const DUMMY_DATA = [
     {
       firstName: "Matheus 1",
@@ -47,10 +47,10 @@ const HomeScreen = () => {
         <TouchableOpacity onPress={() => console.log('Logout')}>
           <Image style={tw('h-10 w-10 rounded-full')} source={{ uri: user.photoURL }} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=> navigation.navigate('Modal')}>
           <Image style={tw('h-14 w-14 ')} source={require('../logo.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate.navigate('Chat')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
           <Ionicons name='chatbubbles-sharp' size={30} color='#ff5864' />
         </TouchableOpacity>
       </View>
