@@ -1,14 +1,29 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { useTailwind } from 'tailwind-rn/dist'
+import { useNavigation } from '@react-navigation/native'
 
 const ModalScreen = () => {
   const tw = useTailwind()
+  const navigation = useNavigation()
   const [image, setImage] = useState(null)
   const [job, setJob] = useState(null)
   const [age, setAge] = useState(null)
   const incompleteForm = !image || !job || !age
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      headerTitle: "Update your profile",
+      headerStyle: {
+          backgroundColor: "#ff5864"
+      },
+      headerTitleStyle: { color: "white"}
+    })
+  }, [])
+  const updateUserProfile = () => {
+
+  }
   return (
     <View style={tw('flex-1 items-center pt-1')}>
       <Image
