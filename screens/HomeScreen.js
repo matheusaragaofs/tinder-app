@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useTailwind } from 'tailwind-rn/dist'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper'
-import { collection, doc, getDocs, onSnapshot } from 'firebase/firestore'
+import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from 'firebase/firestore'
 import { db } from '../config/firebase'
 const HomeScreen = () => {
   const swipeRef = useRef(null)
@@ -28,9 +28,17 @@ const HomeScreen = () => {
  useEffect(() => { 
   const fetchCards = async () => {
     try {
-      const cardRef = collection(db, 'users');
+
+      const passes = (await getDocs(collection(db,'users',user.uid,'passes'))).docs.map(doc => doc.id)
+      const swipes = (await getDocs(collection(db,'users',user.uid,'swipes'))).docs.map(doc => doc.id)
+      
+      const passedUserIds = passes.length > 0 ? passes : ['test']
+      const swipedUserIds = swipes.length > 0 ? swipes : ['test']
+
+      const cardRef = query(collection(db, 'users'), where('id','not-in', [...passedUserIds, ...swipedUserIds]));
       const allCards = await getDocs(cardRef);
-        
+
+
       const parsedCards = allCards.docs.filter(doc => doc.id !== user.uid).map((doc) => {
       return {
         id: doc.id,
@@ -46,33 +54,17 @@ const HomeScreen = () => {
  fetchCards()
 } , [])
 
-console.log(profiles)
-  const DUMMY_DATA = [
-    {
-      firstName: "Matheus 1",
-      lastName: "Silva",
-      job: "Software Developer",
-      photoURL: user.photoURL,
-      age: 21,
-      id: 123
-    },
-    {
-      firstName: "Matheus 2",
-      lastName: "Silva 2",
-      job: "Software Developer 2",
-      photoURL: user.photoURL,
-      age: 22,
-      id: 122
-    },
-    {
-      firstName: "Matheus 3",
-      lastName: "Silva 3",
-      job: "Software Developer 3",
-      photoURL: user.photoURL,
-      age: 23,
-      id: 1234
-    },
-  ]
+const swipeLeft =  (cardIndex) => {
+  if (!profiles[cardIndex]) return;
+  const userSwiped = profiles[cardIndex]
+  setDoc(doc(db, 'users', user.uid, 'passes', userSwiped.id), userSwiped)
+}
+const swipeRight =  async () => {
+  if (!profiles[cardIndex]) return;
+  const userSwiped = profiles[cardIndex]
+  setDoc(doc(db, 'users', user.uid, 'swipes', userSwiped.id), userSwiped)
+}
+
   return (
     <SafeAreaView style={tw('flex-1')}>
       {/* HEADER */}
@@ -97,7 +89,7 @@ console.log(profiles)
           animateCardOpacity
           verticalSwipe={false}
           backgroundColor='transparent'
-          onSwipedLeft={() => { console.log("SWIPE pass")}}
+          onSwipedLeft={(cardIndex) => swipeLeft(cardIndex) }
           onSwipedRight={() => { console.log("SWIPE MATCH")}}
           overlayLabels={{
             left: {
@@ -121,7 +113,6 @@ console.log(profiles)
           cards={profiles} renderCard={card =>  card ? (
             <View key={card.id} style={tw('bg-white h-3/4 rounded-xl')}>
               <Image style={tw('h-full w-full rounded-xl absolute')} source={{ uri: card.photoURL }} />
-
               <View style={[
                 styles.cardShadow,
                 tw('absolute bottom-0 bg-white w-full h-20 flex-row justify-between px-6 py-2 items-center rounded-b-xl')]}> 
@@ -132,7 +123,7 @@ console.log(profiles)
                    <Text style={tw("text-2xl font-bold")}>{card.age}</Text>
               </View>
             </View>
-          ) : (
+          ): (
             <View style={
               [tw('relative bg-white h-3/4 rounded-xl justify-center items-center'), styles.cardShadow
             ]}> 
@@ -146,6 +137,7 @@ console.log(profiles)
             </View>
           )}
         />
+        
       </View>
       <View style={tw('flex flex-row justify-evenly pb-5')}>
                 <TouchableOpacity  onPress={()=> swipeRef.current.swipeLeft()} style={tw("items-center justify-center rounded-full w-16 h-16 bg-red-200")}>
