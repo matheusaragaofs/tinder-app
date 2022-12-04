@@ -6,8 +6,9 @@ import { useAuth } from '../hooks/useAuth'
 import { useTailwind } from 'tailwind-rn/dist'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper'
-import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
 import { db } from '../config/firebase'
+import generateId from '../lib/generateId'
 const HomeScreen = () => {
   const swipeRef = useRef(null)
 
@@ -59,9 +60,36 @@ const swipeLeft =  (cardIndex) => {
   const userSwiped = profiles[cardIndex]
   setDoc(doc(db, 'users', user.uid, 'passes', userSwiped.id), userSwiped)
 }
-const swipeRight =  async () => {
+const swipeRight =  async (cardIndex) => {
   if (!profiles[cardIndex]) return;
-  const userSwiped = profiles[cardIndex]
+  const userSwiped = profiles[cardIndex] 
+  const loggedInProfile = await (await (await getDoc(db, 'users', user.uid)).data())
+
+  //check if the user swiped on you...
+  getDoc(doc(db, 'users', userSwiped.id, 'swipes', user.uid)).then((documentSnapshot) => {
+    if (documentSnapshot.exists()){
+      //user has matched with you before you matched with them...
+      console.log("you matched with ", userSwiped.displayName)
+      setDoc(doc(db,'users',user.uid, 'swipes', userSwiped.id), userSwiped)
+      //Create a match
+      setDoc(doc(db,'matches', generateId(user.uid, userSwiped.id)), {
+        users: {
+          [user.uid]: loggedInProfile,
+          [userSwiped.id]: userSwiped
+        }, 
+        usersMatched: [user.uid, userSwiped.id],
+        timestamp: serverTimestamp()
+      })
+      navigation.navigate('Match', {
+        loggedInProfile,
+        userSwiped
+      })
+
+    } else {
+      //user has swiped as first interaction between the two or didnt get swiped on...
+      setDoc(doc(db,'users',user.uid, 'swipes', userSwiped.id), userSwiped)
+    }
+  })
   setDoc(doc(db, 'users', user.uid, 'swipes', userSwiped.id), userSwiped)
 }
 
@@ -90,7 +118,7 @@ const swipeRight =  async () => {
           verticalSwipe={false}
           backgroundColor='transparent'
           onSwipedLeft={(cardIndex) => swipeLeft(cardIndex) }
-          onSwipedRight={() => { console.log("SWIPE MATCH")}}
+          onSwipedRight={(cardIndex) => swipeRight(cardIndex) }
           overlayLabels={{
             left: {
               title: "NOPE",

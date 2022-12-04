@@ -7,6 +7,7 @@ import ChatScreen from './screens/ChatScreen'
 import LoginScreen from './screens/LoginScreen'
 import { useAuth } from './hooks/useAuth'
 import ModalScreen from './screens/ModalScreen'
+import MatchScreen from './screens/MatchScreen'
 
 const Stack = createNativeStackNavigator() // gives access to all routing capabilities within rn navigation
 const StackNavigator = () => {
@@ -25,6 +26,9 @@ const StackNavigator = () => {
               </Stack.Group>
               <Stack.Group screenOptions={{ presentation: 'modal'}}>
                 <Stack.Screen name='Modal' component={ModalScreen}/>
+              </Stack.Group>
+              <Stack.Group screenOptions={{ presentation: 'transparentModal'}}>
+                <Stack.Screen name='Match' component={MatchScreen}/>
               </Stack.Group>
                 </>
         ): (
