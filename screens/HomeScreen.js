@@ -1,19 +1,52 @@
-import { View, Text, Button, TouchableOpacity, Image, StyleSheet  } from 'react-native'
-import React, { useLayoutEffect, useRef } from 'react'
+import { View, Text,  TouchableOpacity, Image, StyleSheet} from 'react-native'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '../hooks/useAuth'
 import { useTailwind } from 'tailwind-rn/dist'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 import Swiper from 'react-native-deck-swiper'
+import { collection, doc, getDocs, onSnapshot } from 'firebase/firestore'
+import { db } from '../config/firebase'
 const HomeScreen = () => {
   const swipeRef = useRef(null)
-  const user = {
-    photoURL: 'https://instagram.frec23-1.fna.fbcdn.net/v/t51.2885-19/288475390_693296685092013_1905504539709080227_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.frec23-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=_W0PqnmzhbAAX-8ciIf&tn=Jeh1JqqeXFBc3hTI&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfAHSVm9CYrpDaZVleOL0PxOViqXKsAEFmhjyjc-0yzXVQ&oe=638F0239&_nc_sid=8fd12b'
-  }
+
   const tw = useTailwind()
-  // const { user } = useAuth()
+  const { user } = useAuth()
   const navigation = useNavigation()
+
+  useLayoutEffect(
+    () => onSnapshot(doc(db, 'users', user.uid), (snapshot) => {
+      if (!snapshot.exists()) {
+        navigation.navigate('Modal')
+      }
+    })
+  , [])
+
+  const [ profiles, setProfiles ] = useState([])
+
+ useEffect(() => { 
+  const fetchCards = async () => {
+    try {
+      const cardRef = collection(db, 'users');
+      const allCards = await getDocs(cardRef);
+        
+      const parsedCards = allCards.docs.filter(doc => doc.id !== user.uid).map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data()
+      }
+      })
+      setProfiles(parsedCards)
+
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+ fetchCards()
+} , [])
+
+console.log(profiles)
   const DUMMY_DATA = [
     {
       firstName: "Matheus 1",
@@ -85,7 +118,7 @@ const HomeScreen = () => {
               }
             }
           }}
-          cards={DUMMY_DATA} renderCard={card => (
+          cards={profiles} renderCard={card =>  card ? (
             <View key={card.id} style={tw('bg-white h-3/4 rounded-xl')}>
               <Image style={tw('h-full w-full rounded-xl absolute')} source={{ uri: card.photoURL }} />
 
@@ -98,6 +131,18 @@ const HomeScreen = () => {
                    </View> 
                    <Text style={tw("text-2xl font-bold")}>{card.age}</Text>
               </View>
+            </View>
+          ) : (
+            <View style={
+              [tw('relative bg-white h-3/4 rounded-xl justify-center items-center'), styles.cardShadow
+            ]}> 
+            <Text style={tw('font-bold pb-5')}>No more profiles</Text>
+            <Image
+            style={tw('h-20 w-20')}
+            height={100}
+            width={100}
+            source={{uri: "https://links.papareact.com/6gb"}}
+            />
             </View>
           )}
         />

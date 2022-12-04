@@ -12,13 +12,12 @@ const Stack = createNativeStackNavigator() // gives access to all routing capabi
 const StackNavigator = () => {
 
   const { user } = useAuth()
-
   return (
     <Stack.Navigator 
     screenOptions={{
       headerShown: false
     }} >
-        {!user ? (
+        {user ? (
                 <>
               <Stack.Group>
             <Stack.Screen name="Home" component={HomeScreen} />
