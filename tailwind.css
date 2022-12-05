@@ -18,8 +18,20 @@
   bottom: 2.5rem
 }
 
+.m-5 {
+  margin: 1.25rem
+}
+
 .-mt-6 {
   margin-top: -1.5rem
+}
+
+.mt-5 {
+  margin-top: 1.25rem
+}
+
+.mt-20 {
+  margin-top: 5rem
 }
 
 .flex {
@@ -50,6 +62,10 @@
   height: 4rem
 }
 
+.h-32 {
+  height: 8rem
+}
+
 .w-10 {
   width: 2.5rem
 }
@@ -76,6 +92,10 @@
 
 .w-64 {
   width: 16rem
+}
+
+.w-32 {
+  width: 8rem
 }
 
 .flex-1 {
@@ -139,6 +159,11 @@
   background-color: rgb(248 113 113 / var(--tw-bg-opacity))
 }
 
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity))
+}
+
 .p-4 {
   padding: 1rem
 }
@@ -166,6 +191,16 @@
   padding-bottom: 0.5rem
 }
 
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem
+}
+
 .pb-5 {
   padding-bottom: 1.25rem
 }
@@ -176,6 +211,10 @@
 
 .pb-2 {
   padding-bottom: 0.5rem
+}
+
+.pt-20 {
+  padding-top: 5rem
 }
 
 .text-center {

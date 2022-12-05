@@ -66,6 +66,7 @@ const swipeRight =  async (cardIndex) => {
   const loggedInProfile =  (await getDoc(doc(db, 'users', user.uid))).data()
   //check if the user swiped on you...
   const currDoc =  await getDoc(doc(db, 'users', userSwiped.id, 'swipes', user.uid))
+  console.log('loggedInProfile:', loggedInProfile)
   if (currDoc.exists()){
       //user has matched with you before you matched with them...
       console.log("you matched with ", userSwiped.displayName)
@@ -144,7 +145,7 @@ const swipeRight =  async (cardIndex) => {
                 styles.cardShadow,
                 tw('absolute bottom-0 bg-white w-full h-20 flex-row justify-between px-6 py-2 items-center rounded-b-xl')]}> 
                   <View>
-                    <Text style={tw('text-xl font-bold')}> {card.firstName} {card.lastName}</Text>
+                    <Text style={tw('text-xl font-bold')}> {card.displayName}</Text>
                     <Text> {card.job}</Text>
                    </View> 
                    <Text style={tw("text-2xl font-bold")}>{card.age}</Text>
