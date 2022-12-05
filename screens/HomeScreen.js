@@ -63,11 +63,10 @@ const swipeLeft =  (cardIndex) => {
 const swipeRight =  async (cardIndex) => {
   if (!profiles[cardIndex]) return;
   const userSwiped = profiles[cardIndex] 
-  const loggedInProfile = await (await (await getDoc(db, 'users', user.uid)).data())
-
+  const loggedInProfile =  (await getDoc(doc(db, 'users', user.uid))).data()
   //check if the user swiped on you...
-  getDoc(doc(db, 'users', userSwiped.id, 'swipes', user.uid)).then((documentSnapshot) => {
-    if (documentSnapshot.exists()){
+  const currDoc =  await getDoc(doc(db, 'users', userSwiped.id, 'swipes', user.uid))
+  if (currDoc.exists()){
       //user has matched with you before you matched with them...
       console.log("you matched with ", userSwiped.displayName)
       setDoc(doc(db,'users',user.uid, 'swipes', userSwiped.id), userSwiped)
@@ -89,7 +88,7 @@ const swipeRight =  async (cardIndex) => {
       //user has swiped as first interaction between the two or didnt get swiped on...
       setDoc(doc(db,'users',user.uid, 'swipes', userSwiped.id), userSwiped)
     }
-  })
+
   setDoc(doc(db, 'users', user.uid, 'swipes', userSwiped.id), userSwiped)
 }
 
