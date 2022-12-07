@@ -66,10 +66,8 @@ const swipeRight =  async (cardIndex) => {
   const loggedInProfile =  (await getDoc(doc(db, 'users', user.uid))).data()
   //check if the user swiped on you...
   const currDoc =  await getDoc(doc(db, 'users', userSwiped.id, 'swipes', user.uid))
-  console.log('loggedInProfile:', loggedInProfile)
   if (currDoc.exists()){
       //user has matched with you before you matched with them...
-      console.log("you matched with ", userSwiped.displayName)
       setDoc(doc(db,'users',user.uid, 'swipes', userSwiped.id), userSwiped)
       //Create a match
       setDoc(doc(db,'matches', generateId(user.uid, userSwiped.id)), {
